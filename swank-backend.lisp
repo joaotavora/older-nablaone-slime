@@ -859,6 +859,14 @@ TYPE can be any value returned by DESCRIBE-SYMBOL-FOR-EMACS.
 
 Return a documentation string, or NIL if none is available.")
 
+(definterface make-apropos-matcher (pattern case-sensitive)
+    "Return a closure for matching symbols against PATTERN.
+
+Should respect CASE-SENSITIVE"
+  (let ((chr= (if case-sensitive #'char= #'char-equal)))
+    (lambda (symbol)
+      (search pattern (string symbol) :test chr=))))
+
 
 ;;;; Debugging
 
