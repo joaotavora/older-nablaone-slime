@@ -2762,11 +2762,6 @@ that symbols accessible in the current package go first."
                      (string< (symbol-name x) (symbol-name y))
                      (string< (package-name px) (package-name py)))))))))
 
-(defun make-apropos-matcher (pattern case-sensitive)
-  (let ((chr= (if case-sensitive #'char= #'char-equal)))
-    (lambda (symbol)
-      (search pattern (string symbol) :test chr=))))
-
 (defun apropos-symbols (string external-only case-sensitive package)
   (let ((packages (or package (remove (find-package :keyword)
                                       (list-all-packages))))
