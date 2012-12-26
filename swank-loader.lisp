@@ -199,9 +199,13 @@ If LOAD is true, load the fasl file."
 
 (defun load-user-init-file ()
   "Load the user init file, return NIL if it does not exist."
-  (load (merge-pathnames (user-homedir-pathname)
-                         (make-pathname :name ".swank" :type "lisp"))
-        :if-does-not-exist nil))
+  (let ((swank-lisp-file (merge-pathnames (or (and (sys:getenv "HOME")
+                                  (not (string-equal "" (sys:getenv "HOME")))
+                                  (probe-file (sys:getenv "HOME")))
+                             (user-homedir-pathname))
+                         (make-pathname :name ".swank" :type "lisp"))))
+    (format t "Attempting to load swank.lisp at ~A~%" swank-lisp-file)
+    (load swank-lisp-file :if-does-not-exist nil)))
 
 (defun load-site-init-file (dir)
   (load (make-pathname :name "site-init" :type "lisp"
