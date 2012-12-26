@@ -140,6 +140,16 @@
     (:class
      (describe (find-class symbol)))))
 
+(let ((compiled-regexps (make-hash-table :test #'equal)))
+  (defimplementation make-apropos-matcher (regexp case-sensitive)
+    (require 'regexp2)
+    (lambda (symbol)
+      (let ((regexp (or (gethash regexp compiled-regexps)
+                        (setf (gethash regexp compiled-regexps)
+                              (excl:compile-regexp regexp)))))
+        (excl:match-regexp regexp (string symbol) :case-fold (not case-sensitive))))))
+
+
 ;;;; Debugger
 
 (defvar *sldb-topframe*)
