@@ -1,3 +1,42 @@
+2012-12-16  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-repl.lisp (thread-for-evaluation): Override some cases.
+
+2012-11-28  Stas Boukarev  <stassats@gmail.com>
+
+	* swank-asdf.lisp (asdf-system-directory): Return a namestring,
+	not a pathname.
+
+2012-11-23  Stas Boukarev  <stassats@gmail.com>
+
+	* slime-repl.el (slime-repl-auto-right-margin):
+	New variable, defaults to NIL.
+	(slime-repl-eval-string): Respect the above variable.
+	* swank-repl.lisp (listener-eval): New keyword parameter,
+	window-width, if supplied binds *print-right-margin* to its
+	value.
+	Based on a patch by Marco Baringer.
+
+2012-11-22  Stas Boukarev  <stassats@gmail.com>
+
+	* slime-package-fu.el (slime-determine-symbol-style): Fix the
+	default case when no :export symbols are present.
+	Because of (every anything nil) => T.
+
+2012-11-13  Francois-Rene Rideau <tunes@google.com>
+
+	* swank-asdf.lisp: Better ASDF support.
+
+2012-10-19  Stas Boukarev  <stassats@gmail.com>
+
+	* slime-fuzzy.el (slime-fuzzy-choices-buffer): Don't move position
+	in the current buffer, call (slime-fuzzy-next) after switching to
+	the completion buffer.
+
+2012-10-14  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-kawa.scm: Various tweaks.
+
 2012-08-13  Stas Boukarev  <stassats@gmail.com>
 
 	* swank-arglists.lisp (extra-keywords/slots): Check for
