@@ -770,8 +770,12 @@
   (funcall continuation))
 
 (defimplementation spawn (fn &key name)
-  (mp:process-run-function name fn))
-
+  (mp:process-run-function
+      `(:name ,name
+        :initial-bindings ,(and (find-package :cg)
+                                (symbol-value (find-symbol (string '*default-cg-bindings*)
+                                                           :cg))))
+    fn))
 (defvar *id-lock* (mp:make-process-lock :name "id lock"))
 (defvar *thread-id-counter* 0)
 
