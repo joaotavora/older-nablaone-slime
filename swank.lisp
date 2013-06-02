@@ -2209,13 +2209,17 @@ frame."
                  ((nil) nil)
                  ((t) `((:restartable t)))))))
 
+
+(defparameter *sldb-print-case* :downcase)
+
 (defun frame-to-string (frame)
   (with-string-stream (stream :length (* (or *print-lines* 1) 
                                          (or *print-right-margin* 100))
                               :bindings *backtrace-printer-bindings*)
-    (handler-case (print-frame frame stream)
-      (serious-condition ()
-        (format stream "[error printing frame]")))))
+    (let ((*print-case* *sldb-print-case*))
+      (handler-case (print-frame frame stream)
+        (serious-condition ()
+          (format stream "[error printing frame]"))))))
 
 (defslimefun debugger-info-for-emacs (start end)
   "Return debugger state, with stack frames from START to END.
