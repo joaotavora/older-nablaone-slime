@@ -52,15 +52,24 @@ The result is a string."
            (t (error "Don't know how to trace the spec %S" spec))))))
 
 (defun slime-toggle-fancy-trace (&optional using-context-p)
-  "Toggle trace."
+  "Toggle fancy trace."
   (interactive "P")
   (let* ((spec (if using-context-p
                    (slime-extract-context)
                    (slime-symbol-at-point)))
          (spec (slime-trace-query spec)))
-    (message "%s" (slime-eval `(swank:swank-toggle-trace ,spec)))))
+    (message "%s" (slime-eval `(swank:swank-toggle-fancy-trace ,spec)))))
+
+(defun slime-fancy-trace-dialog ()
+  "Show fancy trace dialog."
+  (interactive)
+  (slime-eval `(swank:inspect-in-emacs 'swank-fancy-trace::*traces*)))
 
 ;; override slime-toggle-trace-fdefinition
-(define-key slime-prefix-map "\C-t" 'slime-toggle-fancy-trace)
+(defun slime-fancy-trace-init ()
+  (define-key slime-prefix-map "\C-t" 'slime-toggle-fancy-trace)
+  (define-key slime-prefix-map "T" 'slime-fancy-trace-dialog)
+  )
+
 
 (provide 'slime-fancy-trace)

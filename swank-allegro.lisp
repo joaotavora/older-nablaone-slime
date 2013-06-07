@@ -982,3 +982,32 @@
   (loop for name being the hash-keys of excl::*name-to-char-table*
        when (funcall matchp prefix name)
        collect (string-capitalize name)))
+
+
+;;;; Fancy trace
+
+;;;; Must define dummy package
+(defpackage :swank-fancy-trace
+  (:export #:fancy-trace))
+
+(defimplementation toggle-fancy-trace (spec)
+  (cond ((fancy-traced-p spec)
+         (fancy-untrace spec)
+         nil)
+        (t
+         (eval `(fancy-trace ',spec))
+         t)))
+
+(defun fancy-traced-p (spec)
+  (getf (excl:fwrap-order spec) :fancy-trace))
+
+(defmacro fancy-trace (spec)
+  `(progn
+     (excl:def-fwrapper fancy-trace-wrapper (&rest args)
+       (swank-fancy-trace:fancy-trace ,spec
+                    #'(lambda () (excl:call-next-fwrapper))
+                    :args args))
+     (excl:fwrap ,spec :fancy-trace 'fancy-trace-wrapper)))
+
+(defun fancy-untrace (spec)
+  (excl:funwrap spec :fancy-trace))
